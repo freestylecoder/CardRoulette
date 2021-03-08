@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardRoulette", "CardRoulette\CardRoulette.csproj", "{87DACFBF-AFB1-48D9-9194-EACEDD8B27EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87DACFBF-AFB1-48D9-9194-EACEDD8B27EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87DACFBF-AFB1-48D9-9194-EACEDD8B27EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87DACFBF-AFB1-48D9-9194-EACEDD8B27EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87DACFBF-AFB1-48D9-9194-EACEDD8B27EC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B3F66A35-556B-4223-B0B7-619A45A9B138}
+	EndGlobalSection
+EndGlobal
