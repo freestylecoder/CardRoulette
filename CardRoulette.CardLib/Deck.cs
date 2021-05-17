@@ -164,6 +164,18 @@ namespace CardRoulette.CardLib {
 			return returnValue;
 		}
 
+		public Card BottomDeal() {
+			Card returnValue = deck.Last();
+			deck.RemoveAt( deck.Count - 1 );
+			return returnValue;
+		}
+
+		public Deck BottomDeal( int count = 1 ) {
+			Deck returnValue = new Deck( deck.Skip( deck.Count - count ) );
+			deck = deck.Take( deck.Count - count ).ToList();
+			return returnValue;
+		}
+
 		/// <summary>Splits a Deck into 2 Decks at a random position</summary>
 		/// <returns>A new deck, which is the TOP half of the split</returns>
 		/// <remarks><code>this</code> becomes the bottom half of the split</remarks>
@@ -186,7 +198,7 @@ namespace CardRoulette.CardLib {
 		}
 
 		public void Join( Deck that ) {
-			deck.Concat( that );
+			deck = deck.Concat( that ).ToList();
 			that.deck.Clear();
 		}
 
@@ -198,8 +210,8 @@ namespace CardRoulette.CardLib {
 			Func<int> howManyCards = () => ( r.Next( 0, 5 ) % 3 ) + 1;
 
 			while( that.Any() || this.Any() ) {
-				shuffledDeck.AddRange( that.Deal( howManyCards() ) );
-				shuffledDeck.AddRange( this.Deal( howManyCards() ) );
+				shuffledDeck.InsertRange( 0, that.BottomDeal( howManyCards() ) );
+				shuffledDeck.InsertRange( 0, this.BottomDeal( howManyCards() ) );
 			}
 
 			deck = shuffledDeck;
@@ -212,7 +224,7 @@ namespace CardRoulette.CardLib {
 			Insert( card, new Random().Next( this.deck.Count ) );
 
 		public void Append( Card card ) =>
-			Insert( card, this.deck.Count - 1 );
+			Insert( card, this.deck.Count );
 
 		public void Insert( Card card, int position ) =>
 			this.deck.Insert( position, card );
