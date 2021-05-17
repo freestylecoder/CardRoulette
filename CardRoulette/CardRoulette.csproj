@@ -20,4 +20,7 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CardRoulette.CardLib\CardRoulette.CardLib.csproj" />
+  </ItemGroup>
 </Project>
