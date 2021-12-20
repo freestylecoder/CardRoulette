@@ -12,7 +12,7 @@ namespace CardRoulette {
 
 		private readonly IDictionary<CardLib.Ranks,float> Ranks;
 		private readonly IDictionary<CardLib.Suits,float> Suits;
-		private readonly IDictionary<CardLib.CardValues,float> Cards;
+		private readonly IDictionary<CardLib.CardValue,float> Cards;
 
 		internal DeckOdds( bool includeJokers = false ) {
 			this.Count = 52;
@@ -55,10 +55,10 @@ namespace CardRoulette {
 				)
 			} );
 
-			this.Cards = new Dictionary<CardLib.CardValues,float>( 
+			this.Cards = new Dictionary<CardLib.CardValue,float>( 
 				CardLib.Deck.PokerDeck( includeJokers )
 					.Select(
-						c => new KeyValuePair<CardLib.CardValues,float>( c.Value, 1 )
+						c => new KeyValuePair<CardLib.CardValue,float>( c.Value, 1 )
 					)
 			);
 		}
@@ -100,10 +100,10 @@ namespace CardRoulette {
 					)
 			);
 
-			this.Cards = new Dictionary<CardLib.CardValues,float>( 
+			this.Cards = new Dictionary<CardLib.CardValue,float>( 
 				CardLib.Deck.PokerDeck( includeJokers )
 					.Select(
-						c => new KeyValuePair<CardLib.CardValues,float>(
+						c => new KeyValuePair<CardLib.CardValue,float>(
 							c.Value,
 							deck.Count( c2 => c.Value == c2.Value )
 						)

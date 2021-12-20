@@ -3,12 +3,12 @@ using System;
 
 namespace CardRoulette.CardLib {
 	public class Card : IEquatable<Card> {
-		public readonly CardValues Value;
+		public readonly CardValue Value;
 		//public readonly Texture2D Face;
 		//public readonly Texture2D Back;
 
 		public Card (
-			CardValues value = default //,
+			CardValue value = default //,
 			//Texture2D face = default,
 			//Texture2D back = default
 		) {
@@ -21,7 +21,7 @@ namespace CardRoulette.CardLib {
 			//: this( copy.Value, copy.Face, copy.Back ) { }
 			: this( copy.Value ) { }
 
-		public Card WithValue( CardValues value ) =>
+		public Card WithValue( CardValue value ) =>
 			new Card( value );//, this.Face, this.Back );
 		//public Card WithFace( Texture2D face ) =>
 		//	new Card( this.Value, face, this.Back );

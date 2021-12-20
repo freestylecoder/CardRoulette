@@ -1,5 +1,5 @@
 ﻿namespace CardRoulette.CardLib {
-	public enum CardValues {
+	public enum CardValue {
 		TwoOfClubs			= Ranks.Two		| Suits.Clubs,
 		ThreeOfClubs		= Ranks.Three	| Suits.Clubs,
 		FourOfClubs			= Ranks.Four	| Suits.Clubs,
@@ -57,13 +57,13 @@
 	}
 
 	public static class CardValueExtensions {
-		public static Suits GetSuit( this CardValues value ) =>
+		public static Suits GetSuit( this CardValue value ) =>
 			(Suits)((int)value & 0x111);
 
-		public static Ranks GetRank( this CardValues value ) =>
+		public static Ranks GetRank( this CardValue value ) =>
 			(Ranks)((int)value & 0x1111000);
 
-		public static CardValues ComposeCardValue( Ranks rank, Suits suit ) =>
-			(CardValues)( (int)rank | (int)suit );
+		public static CardValue ComposeCardValue( Ranks rank, Suits suit ) =>
+			(CardValue)( (int)rank | (int)suit );
 	}
 }

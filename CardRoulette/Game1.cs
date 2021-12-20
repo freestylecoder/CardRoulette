@@ -275,7 +275,7 @@ namespace CardRoulette {
 
 			_spriteBatch.Draw( Cursor, trueCursorPos, null, Color.FromNonPremultiplied( 0, 255, 0, 127 ), 0f, cursorCenter, 1f, SpriteEffects.None, 1f );
 
-			//_spriteBatch.DrawString( DefaultFont, trueCursorPos.ToString(), Vector2.Zero, Color.White );
+			_spriteBatch.DrawString( DefaultFont, trueCursorPos.ToString(), new Vector2( CenterX, 0 ), Color.White );
 			_spriteBatch.DrawString(
 				DefaultFont,
 				$@"Player Chips: {PlayerChips}
