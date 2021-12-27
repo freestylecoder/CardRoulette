@@ -215,41 +215,6 @@ namespace CardRoulette {
 			base.Update( gameTime );
 		}
 
-		private void CalculateOdds( Deck deck ) {
-			IDictionary<Ranks,int> ranks = new Dictionary<Ranks, int>( 
-				Enum.GetValues( typeof( Ranks ) )
-					.OfType<Ranks>()
-					.Select(
-						r => new KeyValuePair<Ranks,int>(
-							r,
-							deck.Count( c => r == c.Value.GetRank() )
-						)
-					)
-			);
-
-			IDictionary<Suits,int> suits = new Dictionary<Suits, int>( 
-				Enum.GetValues( typeof( Suits ) )
-					.OfType<Suits>()
-					.Select(
-						s => new KeyValuePair<Suits,int>(
-							s,
-							deck.Count( c => s == c.Value.GetSuit() )
-						)
-					)
-			);
-
-			int red = deck.Count( c =>
-				new[] { Suits.Hearts, Suits.Diamonds }
-					.Contains( c.Value.GetSuit() )
-			);
-			int black = deck.Count( c =>
-				new[] { Suits.Clubs, Suits.Spades }
-					.Contains( c.Value.GetSuit() )
-			);
-
-			return;
-		}
-
 		protected override void Draw( GameTime gameTime ) {
 			GraphicsDevice.Clear( new Color( 15, 109, 57, 255 ) );
 
