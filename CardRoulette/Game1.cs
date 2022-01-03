@@ -12,6 +12,8 @@ namespace CardRoulette {
 		private GraphicsDeviceManager _graphics;
 		private SpriteBatch _spriteBatch;
 
+		private Card LastCard;
+		private int LastPayout;
 		private Deck DeckOfCards;
 		private Deck DiscardPile;
 
@@ -41,10 +43,12 @@ namespace CardRoulette {
 		protected override void Initialize() {
 			// TODO: Add your initialization logic here
 
+			LastPayout = 0;
+			LastCard = null;
 			PlayerChips = 100;
 			Bets = new List<Bet>();
 			DeckOfCards = new Deck();
-			DiscardPile = Deck.PokerDeck( false );
+			DiscardPile = Deck.PokerDeck( true );
 			LastKeyboardState = Keyboard.GetState();
 
 			DrawTimer = TimeSpan.FromSeconds( 3 );
@@ -67,8 +71,14 @@ namespace CardRoulette {
 				.Where( x => x.R == 0 && x.A == 255 )
 				.Select( x => x.i );
 
+			Vector2 boardCorner = new Vector2(
+				( GraphicsDevice.Viewport.Width / 2 ) - ( FullBoard.Width / 2f ),
+				( GraphicsDevice.Viewport.Height / 2 ) - ( FullBoard.Height / 2f )
+			);
+
 			Points = blah
-				.Select( t => new Vector2( t % FullBoard.Width, t / FullBoard.Width ) );
+				.Select( t => new Vector2( t % FullBoard.Width, t / FullBoard.Width ) )
+				.Select( p => p + boardCorner );
 
 			FullBoard.SetData(
 				colors
@@ -191,25 +201,36 @@ namespace CardRoulette {
 				Bets.Remove( bet );
 			}
 
-			//if( TimeSpan.FromMilliseconds( 100 ) > DrawTimer ) {
-			//	DrawTimer += gameTime.ElapsedGameTime;
-			//} else {
-			//	if( !DeckOfCards.Any() ) {
-			//		DeckOfCards.Join( DiscardPile );
+			if( TimeSpan.FromSeconds( 10 ) > DrawTimer ) {
+				DrawTimer += gameTime.ElapsedGameTime;
+			} else {
+				if( !DeckOfCards.Any() ) {
+					DeckOfCards.Join( DiscardPile );
 
-			//		DeckOfCards.Shuffle();
-			//		DeckOfCards.Shuffle();
-			//		DeckOfCards.Shuffle();
-			//		DeckOfCards.Shuffle();
-			//		DeckOfCards.Shuffle();
-			//		DeckOfCards.Shuffle();
-			//		DeckOfCards.Shuffle();
-			//	}
+					DeckOfCards.Shuffle();
+					DeckOfCards.Shuffle();
+					DeckOfCards.Shuffle();
+					DeckOfCards.Shuffle();
+					DeckOfCards.Shuffle();
+					DeckOfCards.Shuffle();
+					DeckOfCards.Shuffle();
+				}
 
-			//	DiscardPile.Append( DeckOfCards.Deal() );
-			//	DrawTimer = TimeSpan.Zero;
-			//	CalculateOdds( DeckOfCards );
-			//}
+				LastCard = DeckOfCards.Deal();
+
+				DeckOdds odds = new DeckOdds();
+				LastPayout = Bets
+					.Select( b => odds.CalculatePayout( b, LastCard ) )
+					.Sum();
+				PlayerChips += LastPayout;
+
+				Bets.Clear();
+				DiscardPile.Append( LastCard );
+				DrawTimer = TimeSpan.Zero;
+
+				if( 0 == PlayerChips )
+					Exit();
+			}
 
 			LastKeyboardState = Keyboard.GetState();
 			base.Update( gameTime );
@@ -225,7 +246,6 @@ namespace CardRoulette {
 				CenterX - ( FullBoard.Width / 2f ),
 				CenterY - ( FullBoard.Height / 2f )
 			);
-			Vector2 trueCursorPos = boardCorner + CursorPosition;
 
 			Vector2 cursorCenter = new Vector2(
 				( Cursor.Width / 2f ),
@@ -236,17 +256,33 @@ namespace CardRoulette {
 			_spriteBatch.Draw( FullBoard, boardCorner, Color.White );
 
 			foreach( Bet bet in Bets )
-				_spriteBatch.Draw( Cursor, bet.Position + boardCorner, null, Color.White, 0f, cursorCenter, 1f, SpriteEffects.None, 1f );
+				_spriteBatch.Draw( Cursor, bet.Position, null, Color.White, 0f, cursorCenter, 1f, SpriteEffects.None, 1f );
 
-			_spriteBatch.Draw( Cursor, trueCursorPos, null, Color.FromNonPremultiplied( 0, 255, 0, 127 ), 0f, cursorCenter, 1f, SpriteEffects.None, 1f );
+			_spriteBatch.Draw( Cursor, CursorPosition, null, Color.FromNonPremultiplied( 0, 255, 0, 127 ), 0f, cursorCenter, 1f, SpriteEffects.None, 1f );
 
-			_spriteBatch.DrawString( DefaultFont, trueCursorPos.ToString(), new Vector2( CenterX, 0 ), Color.White );
 			_spriteBatch.DrawString(
 				DefaultFont,
 				$@"Player Chips: {PlayerChips}
 Current Bet : {Bets.Where( b => b.Position == CursorPosition ).Sum( b => b.Amount )}
 Total Bets  : {Bets.Sum( b => b.Amount )}",
 				Vector2.Zero,
+				Color.White
+			);
+
+			_spriteBatch.DrawString(
+				DefaultFont,
+				@$"Last Payout: {LastPayout}
+Time To Bet: {10 - Math.Truncate(DrawTimer.TotalSeconds)}",
+				//new Vector2( CenterX, 0 ),
+				new Vector2( 750, 0 ),
+				Color.White
+			);
+
+			_spriteBatch.DrawString(
+				DefaultFont,
+				@$"Cards Left: {DeckOfCards.Count()}
+{LastCard}",
+				new Vector2( 1500, 0 ),
 				Color.White
 			);
 
